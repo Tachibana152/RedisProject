@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
  * </p>
  *
  * @author Tachibana
- * @since 2026-8-2
+ * @since 2026-08-05
  */
 public interface IUserService extends IService<User> {
 

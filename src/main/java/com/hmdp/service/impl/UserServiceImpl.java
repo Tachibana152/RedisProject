@@ -14,6 +14,7 @@ import com.hmdp.service.IUserService;
 import com.hmdp.utils.RedisConstants;
 import com.hmdp.utils.RegexUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -34,7 +35,7 @@ import static com.hmdp.utils.RedisConstants.*;
  * </p>
  *
  * @author Tachibana
- * @since 2026-8-5
+ * @since 2026-08-05
  */
 @Slf4j
 @Service
@@ -43,6 +44,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    RedissonClient redissonClient;
 
     @Override
     public Result sendCode(String phone, HttpSession session) {

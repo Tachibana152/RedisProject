@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author 虎哥
- * @since 2021-12-22
+ * @author Tachibana
+ * @since 2026-08-05
  */
 public interface IVoucherService extends IService<Voucher> {
 

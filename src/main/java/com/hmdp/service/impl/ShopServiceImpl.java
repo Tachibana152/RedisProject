@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * </p>
  *
  * @author Tachibana
- * @since 2026-8-3
+ * @since 2026-08-05
  */
 @Service
 public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IShopService {

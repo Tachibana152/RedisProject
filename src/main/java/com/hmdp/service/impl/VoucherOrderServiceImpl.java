@@ -13,6 +13,8 @@ import com.hmdp.utils.RedisIdWorker;
 import com.hmdp.utils.SimpleRedisLock;
 import com.hmdp.utils.UserHolder;
 import lombok.SneakyThrows;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
  *  服务实现类
  * </p>
  *
- * @author 虎哥
- * @since 2021-12-22
+ * @author Tachibana
+ * @since 2026-08-05
  */
 @Service
 public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, VoucherOrder> implements IVoucherOrderService {
@@ -45,10 +48,13 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     private IVoucherOrderService proxy;
 
     @Resource
+    RedissonClient redissonClient;
+
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public Result secKillVoucher(Long voucherId) {
+    public Result secKillVoucher(Long voucherId) throws InterruptedException {
         //check
         SeckillVoucher seckillVoucher = seckillVoucherService.getById(voucherId);
 
@@ -61,9 +67,10 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
 
         UserDTO user = UserHolder.getUser();
         Long userId = user.getId();
-        SimpleRedisLock simpleRedisLock = new SimpleRedisLock(stringRedisTemplate, "order:" + userId);
+        //SimpleRedisLock simpleRedisLock = new SimpleRedisLock(stringRedisTemplate, "order:" + userId);
+        RLock lock = redissonClient.getLock("lock:order:" + userId);
         // 一人一单：对同一用户加锁，锁内调用事务方法（事务提交发生在方法返回前，即锁释放前）
-        Boolean b = simpleRedisLock.tryLcok(100);
+        Boolean b = lock.tryLock(1,10, TimeUnit.SECONDS);
         if(!b)
         {
             return Result.fail("不允许重复下单");
@@ -71,7 +78,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         try{
             return proxy.createVoucherOrder(voucherId, userId);
         } finally {
-            simpleRedisLock.unlock();
+            lock.unlock();
         }
 
 
