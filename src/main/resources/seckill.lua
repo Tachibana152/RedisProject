@@ -1,9 +1,10 @@
--- 秒杀脚本：原子完成「时间判断 + 库存判断 + 扣减 + 一人一单判断」
+-- 秒杀脚本：原子完成「时间判断 + 库存判断 + 扣减 + 一人一单判断 + 发送消息」
 -- ARGV[1] = voucherId 优惠券id
 -- ARGV[2] = userId 用户id
 -- ARGV[3] = 当前时间戳(ms)
 -- ARGV[4] = 秒杀开始时间戳(ms)
 -- ARGV[5] = 秒杀结束时间戳(ms)
+-- ARGV[6] = orderId 订单id
 local voucherId = ARGV[1]
 local userId = ARGV[2]
 
@@ -31,4 +32,6 @@ end
 -- 扣库存 + 记录用户（原子执行）
 redis.call('incrby', stockKey, -1)
 redis.call('sadd', orderKey, userId)
+-- 抢购资格认定成功：向 stream.orders 发送消息，内容包含 voucherId、userId、orderId
+redis.call('xadd', 'stream.orders', '*', 'voucherId', voucherId, 'userId', userId, 'id', ARGV[6])
 return 0
