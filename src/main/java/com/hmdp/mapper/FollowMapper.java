@@ -2,6 +2,7 @@ package com.hmdp.mapper;
 
 import com.hmdp.entity.Follow;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -12,5 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2026-08-05
  */
 public interface FollowMapper extends BaseMapper<Follow> {
-
+    @Select("select * from tb_follow where user_id = #{userId} and follow_user_id = #{id}")
+    Follow selectFollow(Long userId, Long id);
 }

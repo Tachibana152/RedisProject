@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: hmdp
+  # Spring Boot 2.6+ 默认禁止循环引用，本项目的自注入（事务代理 proxy）需要放行
+  main:
+    allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/hmdp?useSSL=false&serverTimezone=UTC
