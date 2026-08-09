@@ -76,7 +76,14 @@ public class CacheClient {
         String  key = Key_prefix + id.toString();
         String json = stringRedisTemplate.opsForValue().get(key);
         if (StrUtil.isBlank(json)) {
-            return null;
+            // 缓存未命中：逻辑过期方案假设数据已预热，但未命中时兜底查一次数据库并写入逻辑过期缓存，
+            // 避免未预热的数据（如 GEO 附近商铺搜索出的店铺）被误判为"不存在"
+            R r = dbFallback.apply(id);
+            if (r == null) {
+                return null;
+            }
+            this.setWithLogicalExpire(key, r, time, timeUnit);
+            return r;
         }
         //命中，先把json反序列化为对象，判断过期时间
         RedisData redisData = JSONUtil.toBean(json, RedisData.class);

@@ -44,10 +44,8 @@ public class ShopController {
      */
     @PostMapping
     public Result saveShop(@RequestBody Shop shop) {
-        // 写入数据库
-        shopService.save(shop);
-        // 返回店铺id
-        return Result.ok(shop.getId());
+        // 写入数据库并同步 GEO 坐标
+        return shopService.saveShop(shop);
     }
 
     /**
@@ -63,21 +61,24 @@ public class ShopController {
 
     /**
      * 根据商铺类型分页查询商铺信息
+     * 当传入经纬度 x、y 时，走 Redis GEO 按距离由近到远查询附近商铺；否则走数据库普通分页
+     * sortBy 支持：空/距离（默认，GEO 按距离排）、comments（人气）、score（评分）
      * @param typeId 商铺类型
      * @param current 页码
+     * @param sortBy 排序字段（可选）
+     * @param x 经度（可选，GEO 搜索时必传）
+     * @param y 纬度（可选，GEO 搜索时必传）
      * @return 商铺列表
      */
     @GetMapping("/of/type")
     public Result queryShopByType(
             @RequestParam("typeId") Integer typeId,
-            @RequestParam(value = "current", defaultValue = "1") Integer current
+            @RequestParam(value = "current", defaultValue = "1") Integer current,
+            @RequestParam(value = "sortBy", required = false) String sortBy,
+            @RequestParam(value = "x", required = false) Double x,
+            @RequestParam(value = "y", required = false) Double y
     ) {
-        // 根据类型分页查询
-        Page<Shop> page = shopService.query()
-                .eq("type_id", typeId)
-                .page(new Page<>(current, SystemConstants.DEFAULT_PAGE_SIZE));
-        // 返回数据
-        return Result.ok(page.getRecords());
+        return shopService.queryShopByType(typeId, current, sortBy, x, y);
     }
 
     /**
