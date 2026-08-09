@@ -105,4 +105,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return null;
     }
+
+    @Override
+    public Result logout(String token) {
+        if (token == null || token.isEmpty()) {
+            return Result.fail("未登录");
+        }
+        // 删除 Redis 中的登录态，下次请求拦截器就查不到用户了
+        Boolean deleted = stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        if (Boolean.TRUE.equals(deleted)) {
+            return Result.ok();
+        }
+        return Result.fail("退出失败");
+    }
 }
