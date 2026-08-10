@@ -1,6 +1,6 @@
-# 黑马点评（hm-dianping）项目文档
+# 同城优选（tongcheng）项目文档
 
-> 基于 Spring Boot 2.7 实现的"黑马点评"商家点评平台后端服务。
+> 基于 Spring Boot 2.7 实现的"同城优选"本地生活服务平台后端服务。
 > 覆盖登录鉴权、商户缓存、优惠券秒杀、关注推送、附近商户、签到等典型业务场景，
 > 是学习 Redis 在实际业务中应用的完整示例项目。
 
@@ -24,7 +24,7 @@
 
 ## 1. 项目简介
 
-本项目是经典的"黑马点评"项目，模拟一个类似大众点评的商户点评平台。
+本项目是"同城优选"项目，模拟一个类似大众点评的本地生活服务平台。
 前端页面由 `nginx` 托管（`forward/nginx-1.18.0/html/hmdp`），后端提供 RESTful API。
 
 项目重点不在于业务本身，而在于 **Redis 在实际高并发场景下的综合应用**：
@@ -62,7 +62,7 @@
 
 - **JDK 8+**（项目配置为 Java 8 语法，可在 JDK 21 上运行）
 - **Maven 3.6+**
-- **MySQL 5.7+**（数据库名 `hmdp`）
+- **MySQL 5.7+**（数据库名 `tongcheng`）
 - **Redis 5.0+**（需支持 Stream，用于秒杀消息队列）
 - **Nginx**（托管前端静态页面，可选，仅前端展示需要）
 
@@ -72,7 +72,7 @@
 
 ### 4.1 初始化数据库
 
-1. 在 MySQL 中创建数据库 `hmdp`（utf8mb4）；
+1. 在 MySQL 中创建数据库 `tongcheng`（utf8mb4）；
 2. 导入 `db/` 目录下的建表 SQL（含 `tb_seckill_voucher.sql` 等）；
 3. 按需插入测试数据（商户、优惠券等）。
 
@@ -83,7 +83,7 @@
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/hmdp?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/tongcheng?useSSL=false&serverTimezone=UTC
     username: root
     password: 你的数据库密码
   redis:
@@ -103,7 +103,7 @@ public static final String IMAGE_UPLOAD_DIR = "...\\forward\\nginx-1.18.0\\html\
 ```bash
 mvn spring-boot:run
 # 或
-mvn clean package -DskipTests && java -jar target/hm-dianping-0.0.1-SNAPSHOT.jar
+mvn clean package -DskipTests && java -jar target/tongcheng-0.0.1-SNAPSHOT.jar
 ```
 
 服务默认端口：**8081**。
@@ -124,8 +124,8 @@ mvn clean package -DskipTests && java -jar target/hm-dianping-0.0.1-SNAPSHOT.jar
 │   └── nginx-1.18.0/
 │       └── html/hmdp/               # 前端页面
 └── src/main/
-    ├── java/com/hmdp/
-    │   ├── HmDianPingApplication.java   # 启动类
+    ├── java/com/tongcheng/
+    │   ├── TongChengApplication.java   # 启动类
     │   ├── config/                      # 配置类
     │   │   ├── MvcConfig.java           # 拦截器注册
     │   │   ├── MybatisConfig.java       # MyBatis-Plus 分页插件
@@ -368,7 +368,7 @@ flowchart TD
 
 ## 10. 数据库设计
 
-项目使用 MyBatis-Plus，实体类与表一一对应（`type-aliases-package: com.hmdp.entity`）：
+项目使用 MyBatis-Plus，实体类与表一一对应（`type-aliases-package: com.tongcheng.entity`）：
 
 | 表                   | 实体             | 说明                                       |
 | -------------------- | ---------------- | ------------------------------------------ |
@@ -417,7 +417,7 @@ flowchart TD
 
 项目包含单元测试：
 
-- `HmDianPingApplicationTests`：Spring 上下文加载测试；
+- `TongChengApplicationTests`：Spring 上下文加载测试；
 - `UserLoginBatchTest`：批量用户登录测试（可用于压测登录接口）。
 
 运行：

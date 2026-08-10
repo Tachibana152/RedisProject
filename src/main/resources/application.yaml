@@ -2,13 +2,13 @@ server:
   port: 8081
 spring:
   application:
-    name: hmdp
+    name: tongcheng
   # Spring Boot 2.6+ 默认禁止循环引用，本项目的自注入（事务代理 proxy）需要放行
   main:
     allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/hmdp?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/tongcheng?useSSL=false&serverTimezone=UTC
     username: root
     password: a359938435
   redis:
@@ -24,7 +24,7 @@ spring:
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
 mybatis-plus:
-  type-aliases-package: com.hmdp.entity # 别名扫描包
+  type-aliases-package: com.tongcheng.entity # 别名扫描包
 logging:
   level:
-    com.hmdp: debug
+    com.tongcheng: debug
