@@ -16707,3 +16707,4 @@
 127.0.0.1 - - [09/Aug/2026:17:40:41 +0800] "GET /api/blog/hot?current=1 HTTP/1.1" 200 7181 "http://localhost:8080/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Edg/151.0.0.0 Mobile Safari/537.36"
 127.0.0.1 - - [09/Aug/2026:17:40:41 +0800] "GET /js/axios.min.map HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0"
 127.0.0.1 - - [09/Aug/2026:17:40:43 +0800] "GET /api/blog/hot?current=2 HTTP/1.1" 200 37 "http://localhost:8080/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Edg/151.0.0.0 Mobile Safari/537.36"
+127.0.0.1 - - [09/Aug/2026:18:48:36 +0800] "GET /api/blog/hot?current=3 HTTP/1.1" 200 37 "http://localhost:8080/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Edg/151.0.0.0 Mobile Safari/537.36"

@@ -72,6 +72,11 @@ public class UserController {
         return Result.ok(user);
     }
 
+    @GetMapping("/sign/count")
+    public Result signCount()
+    {
+        return userService.signCount();
+    }
     @PostMapping("/sign")
     public Result sign()
     {
